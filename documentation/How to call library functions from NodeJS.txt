@@ -1,0 +1,12 @@
+How to call library functions from NodeJS
+-----------------------------------------
+
+node-ffi-napi is a Node.js addon for loading and calling dynamic libraries (.DLL or .so) using pure 
+JavaScript. It can be used to create bindings to native libraries without writing any C++ code.
+
+Potentially you will have to copy the correct library (.DLL or .so) to your file system, 
+e.g. "/usr/bin/libpacevalARM64_sharedLIB.so", see below.
+
+Links & Literature
+[1] https://en.wikipedia.org/wiki/Foreign_function_interface
+[2] https://www.npmjs.com/package/ffi-napi
