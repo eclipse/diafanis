@@ -439,7 +439,12 @@ function handleGetComputationResult(req, res, handle_diafanisComputation_str_in)
             return;
         }
     }
-
+    else
+    {
+        res.status(500).json({ error: 'handle_diafanisComputation does not exist' }); 
+        return;
+    }
+	
     if (req.query.call != null) //GET
         values_ar = JSON.parse('[' + req.query.values.replace(/;/g, ',') + ']');
     else if (req.body.call != null) //POST
@@ -607,7 +612,12 @@ function handleGetComputationResultExt(req, res)
             return;
         }
     }
-
+    else
+    {
+        res.status(500).json({ error: 'handle_diafanisComputation does not exist' }); 
+        return;
+    }
+	
     if (req.query.call != null) //GET
         values_str = req.query.values;
     else if (req.body.call != null) //POST
@@ -998,7 +1008,12 @@ function handleGetComputationInformationXML(req, res)
             return;
         }
     }
-
+    else
+    {
+        res.status(500).json({ error: 'handle_diafanisComputation does not exist' }); 
+        return;
+    }
+	
     let handle_diafanisComputation_addr = handle_diafanisComputation.address();
 
     let maxLengthXML = mathEngineLibrary_ffi.pacevalLibrary_GetComputationInformationXML(handle_diafanisComputation, null);
@@ -1077,6 +1092,11 @@ function handleGetErrorInformation(req, res)
             res.status(500).json({ error: 'handle_diafanisComputation does not exist' });
             return;
         }
+    }
+    else
+    {
+        res.status(500).json({ error: 'handle_diafanisComputation does not exist' }); 
+        return;
     }
     
     let handle_diafanisComputation_addr = handle_diafanisComputation.address();

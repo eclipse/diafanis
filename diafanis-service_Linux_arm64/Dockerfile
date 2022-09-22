@@ -18,5 +18,5 @@ COPY . .
 
 EXPOSE 8080
 
-# CMD [ "node", "paceval-server.js" ]
-CMD ["pm2-runtime", "paceval-server.js", "--expose-gc --max-old-space-size=6144"]
+# CMD [ "node", "diafanis-server.js" ]
+CMD ["pm2-runtime", "diafanis-server.js", "--expose-gc --max-old-space-size=6144"]
