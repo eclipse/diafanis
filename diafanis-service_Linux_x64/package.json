@@ -1,6 +1,6 @@
 {
   "name": "diafanis-service",
-  "version": "4.04.a",
+  "version": "4.04",
   "description": "HTTP server for a mathematical engine as a service in the cloud, e.g. to offload battery-operated IoT devices from battery-consuming calculations.",
   "main": "index.js",
   "scripts": {
@@ -16,7 +16,7 @@
     "mathematical",
     "engine"
   ],
-  "author": "paceval.",
+  "author": "Joerg Koenning (paceval.)",
   "license": "Eclipse Public License 2.0",
   "dependencies": {
     "compression": "^1.7.4",
