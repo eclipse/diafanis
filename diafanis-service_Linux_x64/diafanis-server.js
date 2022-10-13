@@ -42,31 +42,27 @@ var versionNumber = 0;
 var debugEnabled = true;//false;
 
 
-function mathEngineLibraryName()
+function coprocessorSimulationLibraryName()
 {
-    let pacevalLibrary_str = null;
+    let coprocessorSimulationLibrary_str = null;
     let platform = process.platform;
     let architecture = process.arch;
 
-    if (((platform === 'win32') || (platform === 'win64')) && (architecture === 'x64'))
+    if ((platform === 'linux') && (architecture === 'x64'))
     {
-        pacevalLibrary_str = 'paceval_win64i';
-    }
-    else if ((platform === 'linux') && (architecture === 'x64'))
-    {
-        pacevalLibrary_str = './libpaceval_linux_sharedLIB.so';
+        coprocessorSimulationLibrary_str = './coproc_simu_libpaceval_linux_sharedLIB.so';
     }
     else if ((platform === 'linux') && (architecture === 'arm64'))
     {
-        pacevalLibrary_str = './libpacevalARM64_sharedLIB.so';
+        coprocessorSimulationLibrary_str = './coproc_simu_libpacevalARM64_sharedLIB.so';
     }
     else
     {
-        throw new Error('unsupported platform and architecture for pacevalLibrary : '
-                        + platform + ' ' + architecture + '-please, contact us via info@paceval.com')
+        throw new Error('unsupported platform and architecture for coprocessor simulation : '
+                        + platform + ' ' + architecture + '-please, contact us via info@diafanis.com')
     }
     
-    return pacevalLibrary_str;
+    return coprocessorSimulationLibrary_str;
 }
 
 
@@ -77,7 +73,7 @@ var doublePtr_ffi = ref.refType('double');
 var double_ffi = ref.types.double;
 var longPtr_ffi = ref.refType('long');
 
-var mathEngineLibrary_ffi = ffi.Library(mathEngineLibraryName(),
+var mathEngineLibrary_ffi = ffi.Library(coprocessorSimulationLibraryName(),
 {
     'pacevalLibrary_Initialize': [ 'bool', [ 'string' ] ],
     'pacevalLibrary_CreateComputation': [ 'pointer', [ 'string', 'uint32', 'string', 'int', 'pointer' ] ],
@@ -126,7 +122,7 @@ function logMemoryUsed()
     if (debugEnabled == true)
     {
         console.log(``);
-        console.log(`- Status diafanis. server ---------------------`);
+        console.log(`- Status diafanis server ---------------------`);
         console.log(`Resident Set Size: ${ process.memoryUsage().rss / 1024 }K`);
         console.log(`Total Heap Size: ${ process.memoryUsage().heapTotal / 1024 }K`);
         console.log(`Heap allocated: ${kbRoundedHeap}K`);
@@ -244,7 +240,7 @@ function handleCreateComputation(req, res, senddata_in)
     let function_str = '';
     let variables_str = '';
 
-    if (req.query.functionString != null) //GET 
+    if (req.query.functionString != null) //GET  
     {
         function_str = req.query.functionString;
         numberOfVariables = parseInt(req.query.numberOfVariables);
@@ -254,7 +250,7 @@ function handleCreateComputation(req, res, senddata_in)
         if ((interval_str == 'yes') || (interval_str == 'true'))
             interval = true;
     }
-    else //POST
+    else //POST  
     {
         function_str = req.body.functionString;
         numberOfVariables = parseInt(req.body.numberOfVariables);
@@ -276,7 +272,7 @@ function handleCreateComputation(req, res, senddata_in)
         success = mathEngineLibrary_ffi.pacevalLibrary_Initialize(null);
         
         if (debugEnabled == true)
-            console.log(`initialize library: ${success}`);
+            console.log(`diafanis initialize library: ${success}`);
     }
 
     let timeCreate = now(); 
@@ -321,7 +317,7 @@ function handleCreateComputation(req, res, senddata_in)
 
     let return_arr =
     {
-        'handle_Computation': handle_diafanisComputation_addr,
+        'handle_diafanisComputation': handle_diafanisComputation_addr,
         'function-10chars': function10chars,
         'function-length': functionLength,
         'error-type-number': errorType,
@@ -360,7 +356,7 @@ function handleCreateComputation(req, res, senddata_in)
     diafanisComputations_arr[position][0] = handle_diafanisComputation.address(); //[0] the address of 'pointer' returned from mathEngineLibrary_ffi.pacevalLibrary_CreateComputation()
     diafanisComputations_arr[position][1] = handle_diafanisComputation; //[1] 'pointer' returned from mathEngineLibrary_ffi.pacevalLibrary_CreateComputation()
     diafanisComputations_arr[position][2] = Date.now().valueOf() + deleteTimeout; //[2] milliseconds timeout to delete (0 means no timeout)
-    if (req.query.numberOfVariables != null) //GET
+    if (req.query.numberOfVariables != null) //GET    
         diafanisComputations_arr[position][3] = parseInt(req.query.numberOfVariables); //[3] number of variables (GET)
     else //POST
         diafanisComputations_arr[position][3] = parseInt(req.body.numberOfVariables); //[3] number of variables (POST)
@@ -374,7 +370,7 @@ function handleCreateComputation(req, res, senddata_in)
     {
         console.log(`1 hour deletion timer created for computation handle_diafanisComputation: ${handle_diafanisComputation.address()}`);
         console.log(`number of active computations: ${numberOfActiveComputations}`);
-        console.log(`array size: ${position}`);
+        console.log(`array size: ${diafanisComputations_arr.length}`);
     }
     
     logMemoryUsed();
@@ -394,7 +390,7 @@ function handleGetComputationResult(req, res, handle_diafanisComputation_str_in)
     let interval = false;
     let values_ar = [];
 
-    if (req.query.handle_diafanisComputation != null) //GET
+    if (req.query.handle_diafanisComputation != null) //GET  
     {
         if (handle_diafanisComputation_str == null)
             handle_diafanisComputation_str = req.query.handle_diafanisComputation;
@@ -441,11 +437,11 @@ function handleGetComputationResult(req, res, handle_diafanisComputation_str_in)
     }
     else
     {
-        res.status(500).json({ error: 'handle_diafanisComputation does not exist' }); 
+        res.status(500).json({ error: 'handle_diafanisComputation does not exist' });
         return;
     }
-	
-    if (req.query.values != null) //GET
+
+    if (req.query.values != null) //GET    
         values_ar = JSON.parse('[' + req.query.values.replace(/;/g, ',') + ']');
     else //POST
         values_ar = JSON.parse('[' + req.body.values.replace(/;/g, ',') + ']');
@@ -569,12 +565,12 @@ function handleGetComputationResultExt(req, res)
     let values_str = '';
     let values_ar = [];
 
-    if (req.query.numberOfCalculations != null) //GET
+    if (req.query.numberOfCalculations != null) //GET   
     {
         numberOfCalculations = parseInt(req.query.numberOfCalculations);
         handle_diafanisComputation_str = req.query.handle_diafanisComputation;
     }
-    else //POST  
+    else //POST   
     { 
         numberOfCalculations = parseInt(req.body.numberOfCalculations); 
         handle_diafanisComputation_str = req.body.handle_diafanisComputation;
@@ -614,11 +610,11 @@ function handleGetComputationResultExt(req, res)
     }
     else
     {
-        res.status(500).json({ error: 'handle_diafanisComputation does not exist' }); 
+        res.status(500).json({ error: 'handle_diafanisComputation does not exist' });
         return;
     }
-	
-    if (req.query.values != null) //GET
+
+    if (req.query.values != null) //GET    
         values_str = req.query.values;
     else //POST  
         values_str = req.body.values;
@@ -660,10 +656,10 @@ function handleGetComputationResultExt(req, res)
     if (versionNumber == 0)
         versionNumber = mathEngineLibrary_ffi.pacevalLibrary_dmathv(null, errorType, 'paceval_VersionNumber', 0, '', null);
 
-    let resultsArray_ar = [];
-    let trustedMinResultsArray_ar = [];
-    let trustedMaxResultsArray_ar = [];
-    let errorTypesArray_ar = [];
+    let resultsArray_ar = new Array(numberOfCalculations);
+    let trustedMinResultsArray_ar = new Array(numberOfCalculations);
+    let trustedMaxResultsArray_ar = new Array(numberOfCalculations);
+    let errorTypesArray_ar = new Array(numberOfCalculations);
     let result_str = Buffer.alloc(25, 0, 'ascii');
     let trustedMinResult_str = Buffer.alloc(25, 0, 'ascii');
     let trustedMaxResult_str = Buffer.alloc(25, 0, 'ascii');
@@ -675,35 +671,35 @@ function handleGetComputationResultExt(req, res)
     for (iCount = 0; iCount < numberOfCalculations; iCount++)
     {       
         errorTypeInt = errorTypesArray.readInt32LE(iCount * 4 /*int 4 bytes*/);
-        errorTypesArray_ar.push( errorTypeInt );
+        errorTypesArray_ar[iCount] = errorTypeInt;
 
         if (errorTypeInt == 0) //no error
         {
             success = mathEngineLibrary_ffi.pacevalLibrary_dConvertFloatToString(result_str, resultsArray.readDoubleLE(iCount * 8 /*double 8 bytes*/)); 
             stringToAdd = result_str.toString().replace(/\0/g, ''); 
-            resultsArray_ar.push( stringToAdd );
+            resultsArray_ar[iCount] = stringToAdd;
             result_str.fill(0);
 
             if (interval == true)
             {
                 success = mathEngineLibrary_ffi.pacevalLibrary_dConvertFloatToString(trustedMinResult_str, trustedMinResultsArray.readDoubleLE(iCount * 8 /*double 8 bytes*/));   
                 stringToAdd = trustedMinResult_str.toString().replace(/\0/g, ''); 
-                trustedMinResultsArray_ar.push( stringToAdd );
+                trustedMinResultsArray_ar[iCount] = stringToAdd;
                 trustedMinResult_str.fill(0);
 
                 success = mathEngineLibrary_ffi.pacevalLibrary_dConvertFloatToString(trustedMaxResult_str, trustedMaxResultsArray.readDoubleLE(iCount * 8 /*double 8 bytes*/));   
                 stringToAdd = trustedMaxResult_str.toString().replace(/\0/g, ''); 
-                trustedMaxResultsArray_ar.push( stringToAdd );
+                trustedMaxResultsArray_ar[iCount] = stringToAdd;
                 trustedMaxResult_str.fill(0);
             }
         }
         else
         {
-            resultsArray_ar.push('');
+            resultsArray_ar[iCount] = '';
             if (interval == true)
             {
-                trustedMinResultsArray_ar.push('');
-                trustedMaxResultsArray_ar.push('');
+                trustedMinResultsArray_ar[iCount] = '';
+                trustedMaxResultsArray_ar[iCount] = '';
             }
         }
     }
@@ -711,7 +707,7 @@ function handleGetComputationResultExt(req, res)
     let return_arr = 
     { 
         'number-of-multiple-values': numberOfCalculations, 
-        'handle_pacevalComputation': handle_diafanisComputation_addr,
+        'handle_diafanisComputation': handle_diafanisComputation_addr,
         'hasError': hasError,
         'results': resultsArray_ar,
         'interval-min-results': trustedMinResultsArray_ar,
@@ -743,6 +739,7 @@ function handleGetComputationResultExt(req, res)
 function handleGetMultipleComputationsResults(req, res)
 {
     let existingComputation = false;
+    let hasError = false;
     let isError = false;
     let numberOfComputations = 0; 
     let numberOfVariables = 0;
@@ -828,7 +825,7 @@ function handleGetMultipleComputationsResults(req, res)
         }
     }
 
-    if (req.query.values != null) //GET
+    if (req.query.values != null) //GET  
         values_ar = JSON.parse('[' + req.query.values.replace(/;/g, ',') + ']');
     else //POST   
         values_ar = JSON.parse('[' + req.body.values.replace(/;/g, ',') + ']');
@@ -866,12 +863,12 @@ function handleGetMultipleComputationsResults(req, res)
     let timeCalculate = now(true);
     if (interval == false)
     {
-        success = mathEngineLibrary_ffi.pacevalLibrary_dGetMultipleComputationsResults(handle_diafanisComputationsArray, numberOfComputations,
+        hasError = mathEngineLibrary_ffi.pacevalLibrary_dGetMultipleComputationsResults(handle_diafanisComputationsArray, numberOfComputations,
             valuesVariablesArray, resultsArray, null, null, errorTypesArray);
     }
     else
     {
-        success = mathEngineLibrary_ffi.pacevalLibrary_dGetMultipleComputationsResults(handle_diafanisComputationsArray, numberOfComputations,
+        hasError = mathEngineLibrary_ffi.pacevalLibrary_dGetMultipleComputationsResults(handle_diafanisComputationsArray, numberOfComputations,
             valuesVariablesArray, resultsArray, trustedMinResultsArray, trustedMaxResultsArray, errorTypesArray);
     }
     timeCalculate = (now() - timeCalculate) / 1000;
@@ -930,6 +927,7 @@ function handleGetMultipleComputationsResults(req, res)
     { 
         'number-of-multiple-computations': numberOfComputations, 
         'handle_diafanisComputations': handle_diafanisComputation_str_ar,
+        'hasError': hasError,
         'results': resultsArray_ar,
         'interval-min-results': trustedMinResultsArray_ar,
         'interval-max-results': trustedMaxResultsArray_ar,
@@ -974,7 +972,7 @@ function handleGetComputationInformationXML(req, res)
     let handle_diafanisComputation_str;
     let existingComputation = false;
 
-    if (req.query.handle_diafanisComputation != null) //GET
+    if (req.query.handle_diafanisComputation != null) //GET   
     {
         handle_diafanisComputation_str = req.query.handle_diafanisComputation;
     }
@@ -1010,10 +1008,10 @@ function handleGetComputationInformationXML(req, res)
     }
     else
     {
-        res.status(500).json({ error: 'handle_diafanisComputation does not exist' }); 
+        res.status(500).json({ error: 'handle_diafanisComputation does not exist' });
         return;
     }
-	
+
     let handle_diafanisComputation_addr = handle_diafanisComputation.address();
 
     let maxLengthXML = mathEngineLibrary_ffi.pacevalLibrary_GetComputationInformationXML(handle_diafanisComputation, null);
@@ -1021,9 +1019,9 @@ function handleGetComputationInformationXML(req, res)
     maxLengthXML = mathEngineLibrary_ffi.pacevalLibrary_GetComputationInformationXML(handle_diafanisComputation,
                    informationXML_str);
                    
-    let pacevalVersion_str = Buffer.alloc(2000, 0, 'ascii');
+    let diafanisVersion_str = Buffer.alloc(2000, 0, 'ascii');
     mathEngineLibrary_ffi.pacevalLibrary_GetComputationVersionString(handle_diafanisComputation,
-        pacevalVersion_str);
+        diafanisVersion_str);
 
     let errorType = ref.alloc('int');
     if (versionNumber == 0)
@@ -1033,7 +1031,7 @@ function handleGetComputationInformationXML(req, res)
     {
         'handle_diafanisComputation': handle_diafanisComputation_addr,
         'information-XML': informationXML_str.toString().replace(/(?:\\[rn]|[\r\n])/g,'<br>').replace(/\0/g, ''),
-        'version-details': pacevalVersion_str.toString().replace(/\0/g, ''),
+        'version-details': diafanisVersion_str.toString().replace(/\0/g, ''),
         'version-number': versionNumber
     }; 
 
@@ -1059,11 +1057,11 @@ function handleGetErrorInformation(req, res)
     let existingComputation = false;
     let hasError = false;
 
-    if (req.query.handle_diafanisComputation != null) //GET 
+    if (req.query.handle_diafanisComputation != null) //GET  
     {
         handle_diafanisComputation_str = req.query.handle_diafanisComputation;
     }
-    else //POST
+    else //POST    
     {
         handle_diafanisComputation_str = req.body.handle_diafanisComputation;
     }
@@ -1095,7 +1093,7 @@ function handleGetErrorInformation(req, res)
     }
     else
     {
-        res.status(500).json({ error: 'handle_diafanisComputation does not exist' }); 
+        res.status(500).json({ error: 'handle_diafanisComputation does not exist' });
         return;
     }
     
@@ -1131,7 +1129,7 @@ function handleGetErrorInformation(req, res)
         'error-type-number': errorTypeNumer,
         'error-position': errorPositionLong,
         'error-operator': errorOperator_str.toString().replace(/\0/g, ''),
-        'error-details': errorDetails_str.toString().replace(/\0/g, ''),
+        'error-type': errorDetails_str.toString().replace(/\0/g, ''),
         'error-message': errorMessage_str.toString().replace(/\0/g, ''),
         'version-number': versionNumber
     }; 
@@ -1161,12 +1159,12 @@ function handleGETandPOST(req, res, urlGET, urlPOST)
     {
         if ((req.query.call == 'diafanis_CreateComputation') || (urlGET == 'CreateComputation'))  
         {
-            if ((req.query.functionString == null) || (req.query.numberOfVariables == null) || (req.query.variables == null) || (req.query.interval == null)) 
+            if ((req.query.functionString == null) || (req.query.numberOfVariables == null) || (req.query.variables == null) || (req.query.interval == null))  
             {
                 res.status(500).json({ error: 'missing parameters' });
                 return;
             }
-        
+            
             handleCreateComputation(req, res, true);
             return;
         }
@@ -1177,7 +1175,7 @@ function handleGETandPOST(req, res, urlGET, urlPOST)
                 res.status(500).json({ error: 'missing parameters' });
                 return;
             }
-        
+            
             handleGetComputationResult(req, res, null);
             return;
         }
@@ -1188,11 +1186,11 @@ function handleGETandPOST(req, res, urlGET, urlPOST)
                 res.status(500).json({ error: 'missing parameters' });
                 return;
             }
-        
+            
             handleGetComputationResultExt(req, res);
             return;
         }
-        else if ((req.query.call == 'diafanis_GetMultipleComputationsResults') || (urlGET == 'GetMultipleComputationsResults'))  
+        else if ((req.query.call == 'diafanis_GetMultipleComputationsResults') || (urlGET == 'GetMultipleComputationsResults')) 
         {
             if ((req.query.handle_diafanisComputations == null) || (req.query.numberOfdiafanisComputations == null) || (req.query.values == null))  
             {
@@ -1203,7 +1201,7 @@ function handleGETandPOST(req, res, urlGET, urlPOST)
             handleGetMultipleComputationsResults(req, res);
             return;
         }
-        else if ((req.query.call == 'diafanis_GetErrorInformation') || (urlGET == 'GetErrorInformation'))  
+        else if ((req.query.call == 'diafanis_GetErrorInformation') || (urlGET == 'GetErrorInformation')) 
         {
             if (req.query.handle_diafanisComputation == null)   
             {
@@ -1227,12 +1225,12 @@ function handleGETandPOST(req, res, urlGET, urlPOST)
         }
         else if ((req.query.call == 'diafanis') || (urlGET == 'Demo'))   
         {
-            if ((req.query.functionString == null) || (req.query.numberOfVariables == null) || (req.query.variables == null) || (req.query.values == null) || (req.query.interval == null))  
+            if ((req.query.functionString == null) || (req.query.numberOfVariables == null) || (req.query.variables == null) || (req.query.values == null) || (req.query.interval == null)) 
             {
                 res.status(500).json({ error: 'missing parameters' });
                 return;
             }       
-        
+            
             if (req.query.handle_diafanisComputation == null)
                 handle_diafanisComputation_str = handleCreateComputation(req, res, false);
             else
@@ -1258,7 +1256,7 @@ function handleGETandPOST(req, res, urlGET, urlPOST)
                 res.status(500).json({ error: 'missing parameters' });
                 return;
             }
-        
+            
             handleCreateComputation(req, res, true);
             return;
         }
@@ -1269,7 +1267,7 @@ function handleGETandPOST(req, res, urlGET, urlPOST)
                 res.status(500).json({ error: 'missing parameters' });
                 return;
             }
-        
+            
             handleGetComputationResult(req, res, null);
             return;
         }
@@ -1280,7 +1278,7 @@ function handleGETandPOST(req, res, urlGET, urlPOST)
                 res.status(500).json({ error: 'missing parameters' });
                 return;
             }
-        
+            
             handleGetComputationResultExt(req, res);
             return;
         }
@@ -1291,13 +1289,13 @@ function handleGETandPOST(req, res, urlGET, urlPOST)
                 res.status(500).json({ error: 'missing parameters' });
                 return;
             }
-        
+            
             handleGetMultipleComputationsResults(req, res);
             return;
         }
         else if ((req.body.call == 'diafanis_GetErrorInformation') || (urlPOST == 'GetErrorInformation'))  
         {
-            if (req.body.handle_diafanisComputation == null)   
+            if (req.body.handle_diafanisComputation == null)  
             {
                 res.status(500).json({ error: 'missing parameters' });
                 return;
@@ -1308,7 +1306,7 @@ function handleGETandPOST(req, res, urlGET, urlPOST)
         }
         else if ((req.body.call == 'diafanis_GetComputationInformationXML') || (urlPOST == 'GetComputationInformationXML'))  
         {
-            if (req.body.handle_diafanisComputation == null)  
+            if (req.body.handle_diafanisComputation == null)   
             {
                 res.status(500).json({ error: 'missing parameters' });
                 return;
@@ -1317,18 +1315,18 @@ function handleGETandPOST(req, res, urlGET, urlPOST)
             handleGetComputationInformationXML(req, res);
             return;
         }
-        else if ((req.body.call == 'diafanis') || (url == 'Demo'))  
+        else if ((req.body.call == 'diafanis') || (urlPOST == 'Demo'))  
         {
             if ((req.body.functionString == null) || (req.body.numberOfVariables == null) || (req.body.variables == null) || (req.body.values == null) || (req.body.interval == null))  
             {
                 res.status(500).json({ error: 'missing parameters' });
                 return;
             }   
-        
-            if (req.body.handle_diafanisComputation == null)
+            
+            if (req.body.handle_diafanisComputation == null)  
                 handle_diafanisComputation_str = handleCreateComputation(req, res, false);
             else
-                handle_diafanisComputation_str = req.body.handle_diafanisComputation;
+                handle_diafanisComputation_str = req.body.handle_diafanisComputation; 
 
             handleGetComputationResult(req, res, handle_diafanisComputation_str);
 
@@ -1344,7 +1342,7 @@ function handleGETandPOST(req, res, urlGET, urlPOST)
 
     res.status(500).json({ error: 'missing parameters' });
     return;
-};
+}; 
 
 app.get('/', (req, res) =>
 {
@@ -1436,4 +1434,3 @@ app.listen(PORT, () =>
     if (debugEnabled == true)
         console.log(``);
 });
-
