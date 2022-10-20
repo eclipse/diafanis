@@ -229,6 +229,13 @@ function deleteComputationTimer()
     setTimeout(deleteComputationTimer, deleteTimeout); 
 }
 
+//---------------------------------------------------------------------------
+//  handleCreateComputation
+//  Creates a remote computation object with the specified attributes and returns its HANDLE: 
+//  example http://diafanis.cloud/CreateComputation/?functionString=-sin(x*cos(x))^(1/y)&numberOfVariables=2&variables=x;y&interval=yes
+//
+//  see  https://app.swaggerhub.com/apis/diafanis/diafanis-service/4.04
+//---------------------------------------------------------------------------
 function handleCreateComputation(req, res, senddata_in)
 {
     let handle_diafanisComputation = null;
@@ -380,6 +387,13 @@ function handleCreateComputation(req, res, senddata_in)
     return handle_diafanisComputation_addr;
 }
 
+//---------------------------------------------------------------------------
+//  handleGetComputationResult
+//  Solves the computation with the variables declared by /CreateComputation and with the given values: 
+//  example http://diafanis.cloud/GetComputationResult/?handle_diafanisComputation=140523460713760&values=0.5;2
+//
+//  see  https://app.swaggerhub.com/apis/diafanis/diafanis-service/4.04
+//---------------------------------------------------------------------------
 function handleGetComputationResult(req, res, handle_diafanisComputation_str_in)
 {
     let handle_diafanisComputation_str = handle_diafanisComputation_str_in;
@@ -554,6 +568,13 @@ function handleGetComputationResult(req, res, handle_diafanisComputation_str_in)
         console.log(``);
 }
 
+//---------------------------------------------------------------------------
+//  handleGetComputationResultExt
+//  Solves the computation with multiple values for the variables declared by /CreateComputation: 
+//  example http://diafanis.cloud/GetComputationResultExt/?handle_diafanisComputation=140523460713760&numberOfCalculations=2&values=0.5;2;0.5;4
+//
+//  see  https://app.swaggerhub.com/apis/diafanis/diafanis-service/4.04
+//---------------------------------------------------------------------------
 function handleGetComputationResultExt(req, res)
 {
     let numberOfCalculations = 0; 
@@ -736,6 +757,13 @@ function handleGetComputationResultExt(req, res)
         console.log(``);
 }
 
+//---------------------------------------------------------------------------
+//  handleGetMultipleComputationsResults
+//  Solves multiple computations with values for the variables declared by /CreateComputation: 
+//  example http://diafanis.cloud/GetMultipleComputationsResults/?handle_diafanisComputations=1050804320;1050476416&numberOfdiafanisComputations=2&values=0.534346;2;45.4536
+//
+//  see  https://app.swaggerhub.com/apis/diafanis/diafanis-service/4.04
+//---------------------------------------------------------------------------
 function handleGetMultipleComputationsResults(req, res)
 {
     let existingComputation = false;
@@ -967,6 +995,13 @@ function handleGetMultipleComputationsResults(req, res)
         console.log(``);
 }
 
+//---------------------------------------------------------------------------
+//  handleGetComputationInformationXML
+//  A helper function for getting data from a computation object, such as the number of cores in the system, the number of threads used or the cache hits in the computations with that particular computation object: 
+//  example http://diafanis.cloud/GetComputationInformationXML?handle_diafanisComputation=1050777072
+//
+//  see  https://app.swaggerhub.com/apis/diafanis/diafanis-service/4.04
+//---------------------------------------------------------------------------
 function handleGetComputationInformationXML(req, res)
 {
     let handle_diafanisComputation_str;
@@ -1051,6 +1086,13 @@ function handleGetComputationInformationXML(req, res)
         console.log(``);
 }
 
+//---------------------------------------------------------------------------
+//  handleGetErrorInformation
+//  Returns the computation object error type value: 
+//  example http://diafanis.cloud/GetErrorInformation?handle_diafanisComputation=1050777072
+//
+//  see  https://app.swaggerhub.com/apis/diafanis/diafanis-service/4.04
+//---------------------------------------------------------------------------
 function handleGetErrorInformation(req, res)
 {
     let handle_diafanisComputation_str;
