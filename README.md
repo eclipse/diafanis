@@ -5,14 +5,14 @@ SwaggerHub - https://app.swaggerhub.com/apis/diafanis/diafanis-service/4.04
 
 <br>
 <b>WHY DO I NEED A MATHEMATICAL ENGINE?</b>
-
+<br><br>
 Many IoT solutions require <b>complex mathematical calculations to work correctly or make decisions</b>. This can be a self-flying drone or a car that evaluates objects in recorded videos or images in real time during flight. These IoT devices do not have the computing power to perform such mathematical calculations themselves. Or these IoT solutions, because they are battery powered, can't even do the <b>intensive math calculations because that consumes battery time</b>.
 
 <b>This Mathematical Engine as a Service</b> provides a powerful and fast <b>remote math coprocessor service for IoT devices</b> based on a Linux server for x86 (Intel and AMD) or ARM64 processors. Equipped with a simple interface, it will allow IoT devices to perform complex mathematical operations remotely and very quickly, thus <b>avoiding increasing electrical consumption in IoT devices</b>.
 
 <br>
 <b>HOW CAN I USE CALCULATIONS WITH THIS MATHEMATICAL ENGINE?</b>
-
+<br><br>
 To create a calculation the IoT device simply calls the following URL:
 
 http://diafanis.cloud/Demo/?functionString=-sin(x*cos(x))^(1/y)&numberOfVariables=2&variables=x;y&values=0.5;2&interval=yes
@@ -21,7 +21,7 @@ This creates a calculation object for the function "-sin(x*cos(x))^(1/y)" and im
 
 Of course you can specify any mathematical function and any number of variables and also other and longer variable names. :)
 
-In addition, with the calculation you receive a reference to the generated calculation object for the function. From now on you can simply use this reference to get calculations for further values. References are valid for 1 hour, which is extended to 1 hour from the time of access each time a reference is accessed. If only the reference to a calculation object is used, the sometimes very long function does not have to be passed every time. That saves time and computing power. For example, if you have received a reference "handle_Computation: 115626720", simply call up the following URL for a further calculation with the values 0.46577 for x and 2.61 for y:
+In addition, with the calculation you receive a reference to the generated calculation object for the function. From now on you can simply use this reference to get calculations for further values. <b>References are valid for 1 hour</b>, which is extended to 1 hour from the time of access each time a reference is accessed. If only the reference to a calculation object is used, the sometimes very long function does not have to be passed every time. <b>That saves time and computing power.</b> For example, if you have received a reference "handle_Computation: <b>115626720</b>", simply call up the following URL for a further calculation with the values 0.46577 for x and 2.61 for y:
 
 http://diafanis.cloud/GetComputationResult/?handle_diafanisComputation=115626720&values=0.46577;2.61
 
@@ -38,11 +38,11 @@ or <b>POST</b> –
 
 <b>Note:</b> Use the correct encoding in the functionString in the URL (GET) and data (POST) (e.g. replace the ‘+’ character with ‘%2B’).
 
-This allows you to perform complex calculations of any length and with any number of variables on the server. Please note that this is our test server. :) This test server is a 4-core ARM64 Linux server with only 4GB of memory, although it's pretty fast.
+This allows you to <b>perform complex calculations of any length and with any number of variables on the server</b>. Please note that this is our test server. :) This test server is a 4-core ARM64 Linux server with only 4GB of memory, although it's pretty fast.
 
 <br>
 <b>HOW CAN I GET THIS MATHEMATICAL ENGINE ON MY DEVICE?</b>
-
+<br><br>
 Just run this command line in the terminal to get and start the service with Docker:
 
 LINUX FOR x86 PROCESSORS (Intel and AMD)
