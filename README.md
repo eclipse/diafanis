@@ -1,3 +1,5 @@
+![10019436_l-e1442994613885 2](https://paceval.com/wp-content/uploads/2022/10/Eclipse-Diafanis.jpg)<br>
+
 # Eclipse Diafanis - the Mathematical Engine as a Service (e.g. for multi-party computations), 4.04 OAS3
 SwaggerHub - https://app.swaggerhub.com/apis/diafanis/diafanis-service/4.04
 
