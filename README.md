@@ -44,7 +44,7 @@ This allows you to <b>perform complex calculations of any length and with any nu
 <b>HOW CAN I GET THIS MATHEMATICAL ENGINE ON MY OWN SERVER?</b>
 <br><br>
 Just run this command line in the terminal to get and start the service with Docker:
-
+<br>
 LINUX FOR x64 PROCESSORS (Intel and AMD)
 
     sudo docker pull diafanis/diafanis-service_linux_x64:latest
