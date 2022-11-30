@@ -3,8 +3,6 @@
 # Eclipse Diafanis - the Mathematical Engine as a Service (e.g. for multi-party computations), 4.04 OAS3
 SwaggerHub - https://app.swaggerhub.com/apis/diafanis/diafanis-service/4.04
 
-
-
 <br>
 <b>WHY DO I NEED A MATHEMATICAL ENGINE?</b>
 <br><br>
@@ -59,6 +57,7 @@ LINUX FOR ARM64 PROCESSORS (e.g. Raspberry Pi or APPLE M1/M2)
 
     sudo docker run -p 8080:8080 -d diafanis/diafanis-service_linux_arm64
 
-diafanis - Website https://projects.eclipse.org/projects/iot.diafanis/developer
-
+diafanis - Website https://projects.eclipse.org/projects/iot.diafanis/developer <br>
 Send email to diafanis mailto:info@diafanis.cloud
+
+![10019436_l-e1442994613885 2](https://projects.eclipse.org/sites/default/files/Screenshot%202022-11-30%20171253.png)
