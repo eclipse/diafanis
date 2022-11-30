@@ -6,14 +6,14 @@ SwaggerHub - https://app.swaggerhub.com/apis/diafanis/diafanis-service/4.04
 <br>
 <b>WHY DO I NEED A MATHEMATICAL ENGINE?</b>
 <br><br>
-Many IoT solutions require <b>complex mathematical calculations to work correctly or make decisions</b>. This can be a self-flying drone or a car that evaluates objects in recorded videos or images in real time during flight. These IoT devices do not have the computing power to perform such mathematical calculations themselves. Or these IoT solutions, because they are battery powered, can't even do the <b>intensive math calculations because that consumes battery time</b>.
+Many connected devices or so-called IoT solutions require <b>complex mathematical calculations to work correctly or make decisions.</b>. This can be, for example, a smartphone or a remote device that performs predictive analysis or a self-flying drone that evaluates objects in recorded videos or images <b>in real time during flight</b>. These devices do not have the computing power to perform such mathematical calculations themselves. Or these devices, because they are battery powered, can't even do the <b>intensive math calculations because that consumes battery time.</b>.
 
-<b>This Mathematical Engine as a Service</b> provides a powerful and fast <b>remote math coprocessor service for IoT devices</b> based on a Linux server for x86 (Intel and AMD) or ARM64 processors. Equipped with a simple interface, it will allow IoT devices to perform complex mathematical operations remotely and very quickly, thus <b>avoiding increasing electrical consumption in IoT devices</b>.
+<b>This Mathematical Engine as a Service</b> provides a powerful and fast <b>remote math coprocessor service for IoT solutions</b> based on a Linux server for x64 (Intel and AMD) or ARM64 (e.g. Raspberry Pi or APPLE M1/M2) processors. Equipped with a simple interface, it will allow battery-powered devices to perform complex mathematical operations remotely and very quickly, <b>avoiding increasing power consumption of the device itself</b>.
 
 <br>
 <b>HOW CAN I USE CALCULATIONS WITH THIS MATHEMATICAL ENGINE?</b>
 <br><br>
-To create a calculation the IoT device simply calls the following URL:
+To create a calculation the device simply calls the following URL:
 
 http://diafanis.cloud/Demo/?functionString=-sin(x*cos(x))^(1/y)&numberOfVariables=2&variables=x;y&values=0.5;2&interval=yes
 
@@ -41,11 +41,11 @@ or <b>POST</b> –
 This allows you to <b>perform complex calculations of any length and with any number of variables on the server</b>. Please note that this is our test server. :) This test server is a 4-core ARM64 Linux server with only 4GB of memory, although it's pretty fast.
 
 <br>
-<b>HOW CAN I GET THIS MATHEMATICAL ENGINE ON MY DEVICE?</b>
+<b>HOW CAN I GET THIS MATHEMATICAL ENGINE ON MY OWN SERVER?</b>
 <br><br>
 Just run this command line in the terminal to get and start the service with Docker:
 
-LINUX FOR x86 PROCESSORS (Intel and AMD)
+LINUX FOR x64 PROCESSORS (Intel and AMD)
 
     sudo docker pull diafanis/diafanis-service_linux_x64:latest
 
