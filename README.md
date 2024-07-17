@@ -46,6 +46,7 @@ sudo docker pull diafanis/diafanis-service_linux_arm64:latest
 sudo docker run -p 8080:8080 -d diafanis/diafanis-service_linux_arm64
 ```
 
-diafanis - Website https://projects.eclipse.org/projects/iot.diafanis/developer Send email to diafanis mailto:info@diafanis.cloud
+diafanis - Website https://projects.eclipse.org/projects/iot.diafanis/developer 
+<br>Send email to diafanis mailto:info@diafanis.cloud
 
 ![10019436_l-e1442994613885 2](https://projects.eclipse.org/sites/default/files/Screenshot%202022-11-30%20171253.png)
